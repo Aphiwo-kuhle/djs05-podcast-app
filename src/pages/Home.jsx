@@ -55,7 +55,7 @@ function Home() {
 
   return (
     <div style={{ padding: "20px", maxWidth: "1200px", margin: "auto" }}>
-      <h1>All Podcasts👨‍💻</h1>
+      <h1>All Podcast</h1>
 
       {/* 🔍 SEARCH */}
       <input
