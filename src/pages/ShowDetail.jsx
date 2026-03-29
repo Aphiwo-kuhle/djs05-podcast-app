@@ -41,100 +41,74 @@ function ShowDetail() {
 
   return (
     <div style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
-      {/* BACK */}
+
+      {/* BACK BUTTON */}
       <button onClick={() => navigate(-1)}>⬅ Back</button>
 
-      {/* TOP */}
+      {/* TOP SECTION */}
       <div
-  style={{
-    display: "flex",
-    gap: "30px",
-    marginTop: "20px",
-    alignItems: "flex-start",
-    flexWrap: "wrap",
-  }}
->
-  {/* LEFT: IMAGE */}
-  <img
-    src={show.image}
-    style={{
-      width: "300px",
-      borderRadius: "10px",
-      flexShrink: 0,
-    }}
-  />
-
-  {/* RIGHT: CONTENT */}
-  <div style={{ flex: 1, minWidth: "250px" }}>
-    <h1>{show.title}</h1>
-
-    <p style={{ lineHeight: "1.6" }}>{show.description}</p>
-
-    {/* GENRES */}
-    <div style={{ marginTop: "10px" }}>
-      <strong>Genres: </strong>
-      {show.genres.map((g) => (
-        <span
-          key={g}
+        style={{
+          display: "flex",
+          gap: "30px",
+          marginTop: "20px",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+        }}
+      >
+        {/* IMAGE */}
+        <img
+          src={show.image}
           style={{
-            marginRight: "10px",
-            padding: "5px 10px",
-            border: "1px solid #ccc",
-            borderRadius: "20px",
-            fontSize: "12px",
+            width: "300px",
+            borderRadius: "10px",
+            flexShrink: 0,
           }}
-        >
-          {genreMap[g]}
-        </span>
-      ))}
-    </div>
+        />
 
-    {/* EXTRA INFO */}
-    <div style={{ marginTop: "10px" }}>
-      <p>
-        <strong>Last Updated:</strong>{" "}
-        {new Date(show.updated).toDateString()}
-      </p>
-
-      <p>
-        <strong>Total Seasons:</strong> {show.seasons.length}
-      </p>
-
-      <p>
-        <strong>Total Episodes:</strong>{" "}
-        {show.seasons.reduce(
-          (total, s) => total + s.episodes.length,
-          0
-        )}
-      </p>
-    </div>
-  </div>
-</div>
-        <img src={show.image} style={{ width: "250px", borderRadius: "10px" }} />
-
-        <div>
+        {/* CONTENT */}
+        <div style={{ flex: 1, minWidth: "250px" }}>
           <h1>{show.title}</h1>
-          <p>{show.description}</p>
 
-          <p>
-            Last Updated: {new Date(show.updated).toDateString()}
-          </p>
+          <p style={{ lineHeight: "1.6" }}>{show.description}</p>
 
           {/* GENRES */}
-          <h3>Genres</h3>
-          {show.genres.map((g) => (
-            <span
-              key={g}
-              style={{
-                marginRight: "10px",
-                border: "1px solid #ccc",
-                padding: "5px",
-                borderRadius: "5px",
-              }}
-            >
-              {genreMap[g]}
-            </span>
-          ))}
+          <div style={{ marginTop: "10px" }}>
+            <strong>Genres: </strong>
+            {show.genres.map((g) => (
+              <span
+                key={g}
+                style={{
+                  marginRight: "10px",
+                  padding: "5px 10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "20px",
+                  fontSize: "12px",
+                }}
+              >
+                {genreMap[g]}
+              </span>
+            ))}
+          </div>
+
+          {/* EXTRA INFO */}
+          <div style={{ marginTop: "10px" }}>
+            <p>
+              <strong>Last Updated:</strong>{" "}
+              {new Date(show.updated).toDateString()}
+            </p>
+
+            <p>
+              <strong>Total Seasons:</strong> {show.seasons.length}
+            </p>
+
+            <p>
+              <strong>Total Episodes:</strong>{" "}
+              {show.seasons.reduce(
+                (total, s) => total + s.episodes.length,
+                0
+              )}
+            </p>
+          </div>
         </div>
       </div>
 
