@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// 👉 Genre map
+// 🎯 Genre map
 const genreMap = {
   1: "Personal Growth",
   2: "Investigative Journalism",
@@ -11,7 +11,7 @@ const genreMap = {
   6: "Business",
   7: "Fiction",
   8: "News",
-  9: "Kids and Family",
+  9: "Kids & Family",
 };
 
 function Home() {
@@ -21,10 +21,25 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const [search, setSearch] = useState("");
-  const [selectedGenre, setSelectedGenre] = useState("");
+  // ✅ KEEP FILTERS AFTER BACK
+  const [search, setSearch] = useState(
+    localStorage.getItem("search") || ""
+  );
 
-  // 👉 Fetch shows
+  const [selectedGenre, setSelectedGenre] = useState(
+    localStorage.getItem("genre") || ""
+  );
+
+  // 💾 SAVE TO LOCAL STORAGE
+  useEffect(() => {
+    localStorage.setItem("search", search);
+  }, [search]);
+
+  useEffect(() => {
+    localStorage.setItem("genre", selectedGenre);
+  }, [selectedGenre]);
+
+  // 📡 FETCH DATA
   useEffect(() => {
     fetch("https://podcast-api.netlify.app")
       .then((res) => res.json())
@@ -38,24 +53,25 @@ function Home() {
       });
   }, []);
 
-  // 👉 Filter logic
+  // 🔍 FILTER
   const filteredShows = shows.filter((show) => {
     const matchesSearch = show.title
       .toLowerCase()
       .includes(search.toLowerCase());
 
     const matchesGenre =
-      selectedGenre === "" || show.genres.includes(Number(selectedGenre));
+      selectedGenre === "" ||
+      show.genres.includes(Number(selectedGenre));
 
     return matchesSearch && matchesGenre;
   });
 
-  if (loading) return <h2>Loading shows...</h2>;
+  if (loading) return <h2>Loading shows... ⏳</h2>;
   if (error) return <p>{error}</p>;
 
   return (
     <div style={{ padding: "20px", maxWidth: "1200px", margin: "auto" }}>
-      <h1>All Podcasts</h1>
+      <h1>All Podcasts 🎧</h1>
 
       {/* 🔍 SEARCH */}
       <input
@@ -63,7 +79,7 @@ function Home() {
         placeholder="Search podcasts..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        style={{ marginRight: "10px", padding: "5px" }}
+        style={{ marginRight: "10px", padding: "8px" }}
       />
 
       {/* 🎛 FILTER */}
@@ -100,13 +116,13 @@ function Home() {
               border: "1px solid #ccc",
               padding: "10px",
               borderRadius: "10px",
-              transition: "0.3s",
             }}
           >
             <h3>{show.title}</h3>
 
             <img
               src={show.image}
+              alt={show.title}
               style={{ width: "100%", borderRadius: "10px" }}
             />
 
@@ -119,7 +135,8 @@ function Home() {
                     marginRight: "8px",
                     fontSize: "12px",
                     border: "1px solid #ccc",
-                    padding: "3px",
+                    padding: "3px 6px",
+                    borderRadius: "5px",
                   }}
                 >
                   {genreMap[g]}
