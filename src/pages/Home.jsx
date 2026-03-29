@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PodcastCard from "../components/PodcastCard";
 
 // 🎯 Genre map
 const genreMap = {
@@ -21,16 +22,10 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // ✅ KEEP FILTERS AFTER BACK
-  const [search, setSearch] = useState(
-    localStorage.getItem("search") || ""
-  );
+  const [search, setSearch] = useState(localStorage.getItem("search") || "");
+  const [selectedGenre, setSelectedGenre] = useState(localStorage.getItem("genre") || "");
 
-  const [selectedGenre, setSelectedGenre] = useState(
-    localStorage.getItem("genre") || ""
-  );
-
-  // 💾 SAVE TO LOCAL STORAGE
+  // 💾 Save filters
   useEffect(() => {
     localStorage.setItem("search", search);
   }, [search]);
@@ -39,7 +34,7 @@ function Home() {
     localStorage.setItem("genre", selectedGenre);
   }, [selectedGenre]);
 
-  // 📡 FETCH DATA
+  // 📡 Fetch data
   useEffect(() => {
     fetch("https://podcast-api.netlify.app")
       .then((res) => res.json())
@@ -48,26 +43,21 @@ function Home() {
         setLoading(false);
       })
       .catch(() => {
-        setError("Failed to load shows");
+        setError("Failed to load podcasts");
         setLoading(false);
       });
   }, []);
 
-  // 🔍 FILTER
+  // 🔍 Filtered shows
   const filteredShows = shows.filter((show) => {
-    const matchesSearch = show.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
-    const matchesGenre =
-      selectedGenre === "" ||
-      show.genres.includes(Number(selectedGenre));
-
+    const matchesSearch = show.title?.toLowerCase().includes(search.toLowerCase());
+    const matchesGenre = !selectedGenre || show.genres?.includes(Number(selectedGenre));
     return matchesSearch && matchesGenre;
   });
 
-  if (loading) return <h2>Loading shows... ⏳</h2>;
+  if (loading) return <h2>Loading podcasts... ⏳</h2>;
   if (error) return <p>{error}</p>;
+  if (filteredShows.length === 0) return <p>No podcasts found.</p>;
 
   return (
     <div style={{ padding: "20px", maxWidth: "1200px", margin: "auto" }}>
@@ -105,44 +95,13 @@ function Home() {
           gap: "20px",
         }}
       >
-        {filteredShows.length === 0 && <p>No shows found</p>}
-
         {filteredShows.map((show) => (
           <div
             key={show.id}
             onClick={() => navigate(`/show/${show.id}`)}
-            style={{
-              cursor: "pointer",
-              border: "1px solid #ccc",
-              padding: "10px",
-              borderRadius: "10px",
-            }}
+            style={{ cursor: "pointer" }}
           >
-            <h3>{show.title}</h3>
-
-            <img
-              src={show.image}
-              alt={show.title}
-              style={{ width: "100%", borderRadius: "10px" }}
-            />
-
-            {/* GENRES */}
-            <div style={{ marginTop: "10px" }}>
-              {show.genres.map((g) => (
-                <span
-                  key={g}
-                  style={{
-                    marginRight: "8px",
-                    fontSize: "12px",
-                    border: "1px solid #ccc",
-                    padding: "3px 6px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {genreMap[g]}
-                </span>
-              ))}
-            </div>
+            <PodcastCard podcast={show} />
           </div>
         ))}
       </div>
