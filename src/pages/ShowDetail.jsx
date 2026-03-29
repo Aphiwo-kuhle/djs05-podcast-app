@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+// Genre mapping
 const genreMap = {
   1: "Personal Growth",
   2: "Investigative Journalism",
@@ -22,6 +23,7 @@ function ShowDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Fetch show data
   useEffect(() => {
     fetch(`https://podcast-api.netlify.app/id/${id}`)
       .then((res) => res.json())
@@ -35,43 +37,43 @@ function ShowDetail() {
       });
   }, [id]);
 
+  // Loading + error handling
   if (loading) return <h2>Loading... ⏳</h2>;
   if (error) return <p>{error}</p>;
   if (!show) return <p>No show found</p>;
 
   return (
-    <div style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
+    <div style={{ padding: "20px", maxWidth: "1000px", margin: "auto" }}>
 
-      {/* BACK BUTTON */}
+      {/* 🔙 BACK BUTTON */}
       <button onClick={() => navigate(-1)}>⬅ Back</button>
 
-      {/* TOP SECTION */}
+      {/* 🔥 TOP SECTION */}
       <div
         style={{
           display: "flex",
           gap: "30px",
           marginTop: "20px",
-          alignItems: "flex-start",
           flexWrap: "wrap",
         }}
       >
-        {/* IMAGE */}
+        {/* LEFT IMAGE */}
         <img
           src={show.image}
+          alt={show.title}
           style={{
             width: "300px",
             borderRadius: "10px",
-            flexShrink: 0,
           }}
         />
 
-        {/* CONTENT */}
+        {/* RIGHT CONTENT */}
         <div style={{ flex: 1, minWidth: "250px" }}>
           <h1>{show.title}</h1>
 
           <p style={{ lineHeight: "1.6" }}>{show.description}</p>
 
-          {/* GENRES */}
+          {/* 🎯 GENRES */}
           <div style={{ marginTop: "10px" }}>
             <strong>Genres: </strong>
             {show.genres.map((g) => (
@@ -90,7 +92,7 @@ function ShowDetail() {
             ))}
           </div>
 
-          {/* EXTRA INFO */}
+          {/* 📊 EXTRA INFO */}
           <div style={{ marginTop: "10px" }}>
             <p>
               <strong>Last Updated:</strong>{" "}
@@ -112,7 +114,7 @@ function ShowDetail() {
         </div>
       </div>
 
-      {/* SEASON SELECT */}
+      {/* 🔽 SEASON SELECT */}
       <h2 style={{ marginTop: "30px" }}>Current Season</h2>
 
       <select
@@ -126,7 +128,7 @@ function ShowDetail() {
         ))}
       </select>
 
-      {/* SEASON DATA */}
+      {/* 📺 SEASON DATA */}
       {show.seasons
         .filter((season) => season.season === selectedSeason)
         .map((season) => (
@@ -141,6 +143,7 @@ function ShowDetail() {
                   border: "1px solid #ccc",
                   padding: "10px",
                   marginBottom: "10px",
+                  borderRadius: "8px",
                 }}
               >
                 <p>
@@ -149,6 +152,7 @@ function ShowDetail() {
                   </strong>
                 </p>
 
+                {/* ✂️ SHORT DESCRIPTION */}
                 <p>
                   {ep.description.length > 100
                     ? ep.description.slice(0, 100) + "..."
